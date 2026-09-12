@@ -1,0 +1,163 @@
+@{
+	ViewData["Title"] = "Dashboard"; var role = ViewBag.Role as string ?? "Admin";
+}
+<div class="page-head">
+	<div>
+		<h3>@role Dashboard</h3>
+		<p class="text-muted mb-0">Welcome back, @ViewBag.UserName. Your portal is ready.</p>
+	</div>
+</div>
+@if (role == "Admin")
+{
+	<div class="row g-3">
+		<div class="col-6 col-xl-3">
+			<div class="stat-card card"><span>Total Students</span><b>1,248</b><small>+8.2% this month</small></div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="stat-card card"><span>Teachers</span><b>86</b><small>4 new this month</small></div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="stat-card card"><span>Fees Collected</span><b>₹4.52L</b><small>82% collection</small></div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="stat-card card"><span>Attendance</span><b>94.6%</b><small>Today</small></div>
+		</div>
+	</div>
+}
+else if (role == "Principal")
+{
+
+	<div class="row g-3">
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>School Strength</span>
+				<h2>1,248</h2><small>Students</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Today Attendance</span>
+				<h2>94.6%</h2><small>School wide</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Pending Fees</span>
+				<h2>₹98K</h2><small>Need review</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Upcoming Exams</span>
+				<h2>12</h2><small>This term</small>
+			</div>
+		</div>
+	</div>
+}
+else if (role == "Teacher")
+{
+
+	<div class="row g-3">
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>My Classes</span>
+				<h2>6</h2><small>Assigned</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>My Students</span>
+				<h2>214</h2><small>Across classes</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Attendance Today</span>
+				<h2>96%</h2><small>Marked</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Homework</span>
+				<h2>8</h2><small>Pending review</small>
+			</div>
+		</div>
+	</div>
+}
+else if (role == "Student")
+{
+
+	<div class="row g-3">
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>My Class</span>
+				<h2>8-A</h2><small>2026-27</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Attendance</span>
+				<h2>96%</h2><small>Overall</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Exams</span>
+				<h2>3</h2><small>Upcoming</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Homework</span>
+				<h2>5</h2><small>Pending</small>
+			</div>
+		</div>
+	</div>
+}
+else
+{
+
+	<div class="row g-3">
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Children</span>
+				<h2>2</h2><small>Linked students</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Attendance</span>
+				<h2>95%</h2><small>Overall</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Fees Due</span>
+				<h2>₹12K</h2><small>Current term</small>
+			</div>
+		</div>
+		<div class="col-6 col-xl-3">
+			<div class="card">
+				<span>Messages</span>
+				<h2>4</h2><small>Unread</small>
+			</div>
+		</div>
+	</div>
+}
+<div class="row g-3 mt-1">
+	<div class="col-lg-8">
+		<div class="panel">
+			<div class="panel-title">Attendance Overview</div>
+			<div class="chart-bars">
+				<i style="height:55%"></i><i style="height:70%"></i><i style="height:62%"></i><i style="height:88%"></i><i style="height:76%"></i><i style="height:94%"></i><i style="height:82%"></i>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-4">
+		<div class="panel">
+			<div class="panel-title">Fee Collection</div>
+			<div class="donut"><span>82%</span></div>
+			<p class="text-center text-muted">₹4.52L collected</p>
+		</div>
+	</div>
+</div>

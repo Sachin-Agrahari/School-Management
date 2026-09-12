@@ -1,0 +1,48 @@
+<div class="head">
+	<div><span>STUDENT MANAGEMENT</span>
+		<h1>Students</h1>
+		<p>Manage student profiles, admissions and enrollment.</p>
+	</div><a class="btn btn-primary" href="/Students/Create">+ Add Student</a>
+</div>
+<section class="card tablebox">
+	<div class="filter-panel"><input class="form-control table-filter" placeholder="Search records..."><select
+			class="form-select table-filter">
+			<option value="">All</option>
+			<option>Active</option>
+			<option>Pending</option>
+			<option>Paid</option>
+		</select><button class="btn btn-light" onclick="resetFilters()">Reset</button></div>
+	<table id="studentsTable">
+		<thead>
+			<tr>
+				<th>Student</th>
+				<th>Admission No.</th>
+				<th>Class</th>
+				<th>Parent Contact</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><b>Arjun Sharma</b></td>
+				<td>ADM-2026-1042</td>
+				<td>8-A</td>
+				<td>+91 98XXXXXX12</td>
+				<td><label class="ok">Active</label></td>
+				<td>•••</td>
+			</tr>
+			<tr>
+				<td><b>Ananya Singh</b></td>
+				<td>ADM-2026-1041</td>
+				<td>6-B</td>
+				<td>+91 97XXXXXX45</td>
+				<td><label class="ok">Active</label></td>
+				<td>•••</td>
+			</tr>
+		</tbody>
+	</table>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js" asp-append-version="true"></script>
+<script src="~/customjs/student/student.js" asp-append-version="true" ></script>

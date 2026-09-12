@@ -1,0 +1,963 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Menu Structure";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Menu Structure</title>
+
+    <style>
+        .page-header {
+            background: white;
+            border-radius: 12px;
+            padding: 6px 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        }
+
+            .page-header h3 {
+                margin: 0;
+                font-weight: 600;
+            }
+
+            .page-header p {
+                margin: 5px 0 0;
+                color: #777;
+            }
+
+        .tree-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        }
+
+        /* Search */
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+            .search-box i {
+                position: absolute;
+                left: 15px;
+                top: 13px;
+                color: #999;
+            }
+
+            .search-box input {
+                padding-left: 42px;
+                height: 45px;
+                border-radius: 8px;
+            }
+
+        /* Tree */
+
+        .tree {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+            .tree ul {
+                list-style: none;
+                margin: 0;
+                padding-left: 38px;
+                position: relative;
+            }
+
+                .tree ul::before {
+                    content: "";
+                    position: absolute;
+                    left: 17px;
+                    top: 0;
+                    bottom: 20px;
+                    border-left: 1px dashed #c8ced8;
+                }
+
+            .tree li {
+                position: relative;
+                padding: 7px 0;
+            }
+
+                .tree li::before {
+                    content: "";
+                    position: absolute;
+                    left: -20px;
+                    top: 27px;
+                    width: 20px;
+                    border-top: 1px dashed #c8ced8;
+                }
+
+            .tree > li::before {
+                display: none;
+            }
+
+        /* Node */
+
+        .tree-node {
+            min-height: 55px;
+            border: 1px solid #e4e7ec;
+            border-radius: 9px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            transition: .2s;
+        }
+
+            .tree-node:hover {
+                box-shadow: 0 3px 12px rgba(0,0,0,.08);
+                border-color: #b8c1d1;
+            }
+
+        /* Expand Button */
+
+        .toggle-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            background: #eef2f7;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+            .toggle-btn:hover {
+                background: #dfe6ef;
+            }
+
+            .toggle-btn.no-child {
+                visibility: hidden;
+            }
+
+        /* Icon */
+
+        .menu-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background: #edf3ff;
+            color: #356ae6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        /* Menu info */
+
+        .menu-info {
+            flex: 1;
+        }
+
+        .menu-name {
+            font-weight: 600;
+            color: #252a34;
+            font-size: 15px;
+        }
+
+        .menu-details {
+            font-size: 12px;
+            color: #8a909b;
+            margin-top: 2px;
+        }
+
+        /* Badge */
+
+        .level-badge {
+            font-size: 11px;
+            padding: 5px 9px;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .root-badge {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .parent-badge {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .child-badge {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        /* Actions */
+
+        .node-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+            .node-actions button {
+                border: none;
+                background: transparent;
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+            }
+
+                .node-actions button:hover {
+                    background: #f0f2f5;
+                }
+
+        .edit-btn {
+            color: #3578e5;
+        }
+
+        .add-btn {
+            color: #198754;
+        }
+
+        .delete-btn {
+            color: #dc3545;
+        }
+
+        /* Hidden children */
+
+        .tree li.collapsed > ul {
+            display: none;
+        }
+
+        /* Legend */
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-root {
+            background: #2e7d32;
+        }
+
+        .dot-parent {
+            background: #ef6c00;
+        }
+
+        .dot-child {
+            background: #1565c0;
+        }
+
+        @@media(max - width: 768px)
+
+        {
+            .page-wrapper
+
+        {
+            padding: 10px;
+        }
+
+        .tree-card {
+            padding: 15px;
+        }
+
+        .tree ul {
+            padding-left: 25px;
+        }
+
+            .tree ul::before {
+                left: 10px;
+            }
+
+        .tree li::before {
+            left: -15px;
+            width: 15px;
+        }
+
+        .node-actions {
+            display: none;
+        }
+
+        .level-badge {
+            display: none;
+        }
+
+        }
+
+        .tree-node.search-match {
+            background-color: #fff3cd !important;
+            border: 1px solid #ffc107 !important;
+            border-radius: 6px;
+        }
+
+            .tree-node.search-match .menu-name {
+                font-weight: 600;
+            }
+
+        .Dvmenu {
+            max-height: 550px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 5px;
+        }
+
+            .Dvmenu::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .Dvmenu::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 10px;
+            }
+
+            .Dvmenu::-webkit-scrollbar-track {
+                background: transparent;
+            }
+    a{
+        text-decoration:none !important;
+    }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+
+        <!-- HEADER -->
+
+        <div class="page-header">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h4>
+                        <i class="fa-solid fa-sitemap me-2"></i>
+                        Menu Structure
+                    </h4>
+
+                    <p>
+                        Manage and identify parent-child menu relationships
+                    </p>
+
+                </div>
+
+                <button class="btn btn-primary">
+                    <i class="fa-solid fa-plus me-1"></i>
+                    Add Root Menu
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- TREE CARD -->
+
+        <div class="tree-card">
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-search"></i>
+
+                <input type="text"
+                       id="menuSearch"
+                       class="form-control"
+                       placeholder="Search menu...">
+
+            </div>
+
+
+            <!-- LEGEND -->
+
+            <div class="legend">
+
+                <div class="legend-item">
+                    <span class="legend-dot dot-root"></span>
+                    Root Menu
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot dot-parent"></span>
+                    Parent Menu
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot dot-child"></span>
+                    Child Menu
+                </div>
+
+            </div>
+
+
+            <!-- TREE -->
+            <div class="Dvmenu" >
+                <ul class="tree" id="menuTree">
+                </ul>
+            </div>
+           
+
+        </div>
+
+    </div>
+
+    <!--
+        Menu table Structer
+
+        ID	Menu_Name	Parent_ID	URL	seq	ParentSeq	Show	Tooltip	Spcial	SessionCheck_Flag	Type	height	width	Popup	UId	ShowZero
+    1	MASTER	0	Forms/MainMaster/MainMaster.aspx	0	0	0	MASTER	NULL	NULL	PADS	NULL	NULL	NULL	65	NULL
+    2	EARNING MASTER	1	Forms/Master/MainMaster.aspx?MasterType=2	1	0	1	EARNING	NULL	NULL	PADS	NULL	NULL	NULL	66	NULL
+    3	DEDUCTION MASTER	1	Forms/Master/MainMaster.aspx?MasterType=3	2	0	1,2	DEDUCTION	NULL	NULL	PADS	NULL	NULL	NULL	67	NULL
+
+    -->
+    <!-- jQuery -->
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            LoadMenuTree();
+
+             // ============================================================
+            // GET MENU NAME
+            // ============================================================
+
+            function getMenuName(li) {
+
+                return li
+                    .children(".tree-node")
+                    .find(".menu-name")
+                    .first()
+                    .text()
+                    .toLowerCase()
+                    .trim();
+            }
+
+
+            // ============================================================
+            // SET EXPANDED
+            // ============================================================
+
+            function expandMenu(li) {
+
+                li.removeClass("collapsed");
+
+                li.children(".tree-node")
+                    .find(".toggle-btn")
+                    .first()
+                    .find("i")
+                    .removeClass("fa-plus")
+                    .addClass("fa-minus");
+
+            }
+
+
+            // ============================================================
+            // SET COLLAPSED
+            // ============================================================
+
+            function collapseMenu(li) {
+
+                li.addClass("collapsed");
+
+                li.children(".tree-node")
+                    .find(".toggle-btn")
+                    .first()
+                    .find("i")
+                    .removeClass("fa-minus")
+                    .addClass("fa-plus");
+
+            }
+
+
+            // ============================================================
+            // COLLAPSE ALL
+            // ============================================================
+
+            function collapseAllMenus() {
+
+                $("#menuTree li").each(function () {
+
+                    let li = $(this);
+
+                    if (li.children("ul").length > 0) {
+
+                        collapseMenu(li);
+
+                    }
+
+                });
+
+            }
+
+
+            // ============================================================
+            // PAGE LOAD
+            // ============================================================
+
+            collapseAllMenus();
+
+
+            // ============================================================
+            // EXPAND / COLLAPSE
+            // ============================================================
+
+            $(document).on(
+                "click",
+                "#menuTree .toggle-btn:not(.no-child)",
+                function (e) {
+
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    let button = $(this);
+
+                    let li = button.closest("li");
+
+
+                    // ----------------------------------------------------
+                    // CURRENTLY COLLAPSED
+                    // ----------------------------------------------------
+
+                    if (li.hasClass("collapsed")) {
+
+                        expandMenu(li);
+
+                    }
+
+
+                    // ----------------------------------------------------
+                    // CURRENTLY EXPANDED
+                    // ----------------------------------------------------
+
+                    else {
+
+                        collapseMenu(li);
+
+                    }
+
+                }
+            );
+
+
+            // ============================================================
+            // SEARCH
+            // ============================================================
+
+            $("#menuSearch").on("keyup", function () {
+
+                let searchValue = $(this)
+                    .val()
+                    .toLowerCase()
+                    .trim();
+
+
+                // ========================================================
+                // CLEAR SEARCH
+                // ========================================================
+
+                if (searchValue === "") {
+
+                  
+                    $("#menuTree li").show();
+
+                  
+                    $("#menuTree .tree-node")
+                        .removeClass("search-match");
+
+                    // IMPORTANT:
+                
+                   
+                    $("#menuTree ul").removeAttr("style");
+
+                    
+                    collapseAllMenus();
+
+                    return;
+                }
+
+
+                // ========================================================
+                // SEARCH START
+                // ========================================================
+
+               
+                $("#menuTree .tree-node")
+                    .removeClass("search-match");
+
+
+             
+                $("#menuTree li").hide();
+
+
+               
+                $("#menuTree ul").removeAttr("style");
+
+
+                // ========================================================
+                // RECURSIVE SEARCH
+                // ========================================================
+
+                function searchTree(li) {
+
+                    let menuName = getMenuName(li);
+
+                    let currentMatch =
+                        menuName.indexOf(searchValue) !== -1;
+
+
+                    let childMatch = false;
+
+
+                    // ----------------------------------------------------
+                    // SEARCH CHILDREN
+                    // ----------------------------------------------------
+
+                    li.children("ul")
+                        .children("li")
+                        .each(function () {
+
+                            let childResult =
+                                searchTree($(this));
+
+                            if (childResult) {
+
+                                childMatch = true;
+
+                            }
+
+                        });
+
+
+                    // ====================================================
+                    // CURRENT MENU MATCH
+                    // ====================================================
+
+                    if (currentMatch) {
+
+                       
+                        li.show();
+
+
+                        // Highlight
+                        li.children(".tree-node")
+                            .addClass("search-match");
+
+
+                     
+                        if (li.children("ul").length > 0) {
+
+                            expandMenu(li);
+
+                        }
+
+                    }
+
+
+                    // ====================================================
+                    // CHILD MATCH
+                    // ====================================================
+
+                    if (childMatch) {
+
+                        // Parent visible
+                        li.show();
+
+
+                        // Parent expanded
+                        expandMenu(li);
+
+                    }
+
+
+                    return currentMatch || childMatch;
+                }
+
+
+                // ========================================================
+                // START SEARCH FROM ROOT
+                // ========================================================
+
+                $("#menuTree")
+                    .children("li")
+                    .each(function () {
+
+                        searchTree($(this));
+
+                    });
+
+            });
+
+
+            // ============================================================
+            // ADD CHILD
+            // ============================================================
+
+            $(document).on("click", ".add-btn", function () {
+
+                let menuName = $(this)
+                    .closest(".tree-node")
+                    .find(".menu-name")
+                    .text()
+                    .trim();
+
+                alert("Add child menu under: " + menuName);
+
+            });
+
+
+            // ============================================================
+            // EDIT
+            // ============================================================
+
+            $(document).on("click", ".edit-btn", function () {
+
+                let menuName = $(this)
+                    .closest(".tree-node")
+                    .find(".menu-name")
+                    .text()
+                    .trim();
+
+                alert("Edit menu: " + menuName);
+
+            });
+
+
+            // ============================================================
+            // DELETE
+            // ============================================================
+
+            $(document).on("click", ".delete-btn", function () {
+
+                let menuName = $(this)
+                    .closest(".tree-node")
+                    .find(".menu-name")
+                    .text()
+                    .trim();
+
+
+                if (
+                    confirm(
+                        "Are you sure you want to delete " +
+                        menuName +
+                        "?"
+                    )
+                ) {
+
+                    $(this)
+                        .closest("li")
+                        .remove();
+
+                }
+
+            });
+
+
+        });
+
+        function LoadMenuTree() {
+
+            $.ajax({
+                url: '/Master/GetMenuList',
+                type: 'GET',
+
+                success: function (data) {
+
+                    $("#menuTree").empty();
+
+                    // ROOT = Parent_ID 0
+                    var rootMenus = data.filter(function (item) {
+
+                        return Number(item.parent_ID) === 0;
+
+                    });
+
+                    rootMenus.sort(function (a, b) {
+
+                        return (a.seq || 0) - (b.seq || 0);
+
+                    });
+
+                    rootMenus.forEach(function (menu) {
+
+                        $("#menuTree").append(
+                            CreateMenuNode(menu, data)
+                        );
+
+                    });
+
+                },
+
+                error: function (xhr) {
+
+                    console.log(xhr.responseText);
+
+                }
+            });
+        }
+
+
+        function CreateMenuNode(menu, allMenus) {
+
+            // IMPORTANT:
+            // Child  Parent_ID current menu  ID Is equal
+            var children = allMenus.filter(function (item) {
+
+                return Number(item.parent_ID) === Number(menu.id);
+
+            });
+
+            //   according to Sequence
+            children.sort(function (a, b) {
+
+                return (a.seq || 0) - (b.seq || 0);
+
+            });
+
+            var hasChildren = children.length > 0;
+
+            // Level
+            var level = 1;
+
+            if (menu.show) {
+                level = menu.show.toString().split(',').length;
+            }
+
+            var badgeClass = "";
+            var badgeText = "";
+
+            if (level === 1) {
+
+                badgeClass = "root-badge";
+                badgeText = "ROOT";
+
+            }
+            else if (hasChildren) {
+
+                badgeClass = "parent-badge";
+                badgeText = "PARENT";
+
+            }
+            else {
+
+                badgeClass = "child-badge";
+                badgeText = "CHILD";
+
+            }
+
+            var html = "";
+
+            html += `<li data-menu-id="${menu.id}">`;
+
+            html += `
+                <div class="tree-node">
+                    ${
+                        hasChildren
+                        ?
+                        `<button class="toggle-btn">
+                            <i class="fa-solid fa-minus"></i>
+                         </button>`
+                        :
+                        `<button class="toggle-btn no-child">
+                            <i class="fa-solid fa-minus"></i>
+                         </button>`
+                    }
+
+                    <div class="menu-icon">
+                        <i class="fa-solid fa-folder"></i>
+                    </div>
+
+                    <div class="menu-info">
+
+                      
+                      <div class="menu-name">
+                          ${
+                              menu.url && menu.url.trim() !== ""
+                              ?
+                              `<a href="${menu.url}" class="menu-link">
+                                  ${menu.menu_Name}
+                               </a>`
+                              :
+                              `${menu.menu_Name}`
+                          }
+                      </div>
+
+                        <div class="menu-details">
+                            Menu ID: ${menu.id} |
+                            Parent ID: ${menu.parent_ID ?? "NULL"}
+                        </div>
+
+                    </div>
+
+                    <span class="level-badge ${badgeClass}">
+                        ${badgeText}
+                    </span>
+
+                    
+
+                </div>
+            `;
+            // <div class="node-actions">
+
+                    //     <button class="add-btn"
+                    //             title="Add Child"
+                    //             data-id="${menu.id}">
+                    //         <i class="fa-solid fa-plus"></i>
+                    //     </button>
+
+                    //     <button class="edit-btn"
+                    //             title="Edit"
+                    //             data-id="${menu.id}">
+                    //         <i class="fa-solid fa-pen"></i>
+                    //     </button>
+
+                    //     <button class="delete-btn"
+                    //             title="Delete"
+                    //             data-id="${menu.id}">
+                    //         <i class="fa-solid fa-trash"></i>
+                    //     </button>
+
+                    // </div>
+            // Child menus
+            if (hasChildren) {
+
+                html += `<ul>`;
+
+                children.forEach(function (child) {
+
+                    html += CreateMenuNode(child, allMenus);
+
+                });
+
+                html += `</ul>`;
+            }
+
+            html += `</li>`;
+
+            return html;
+        }
+    </script>
+</body>
+</html>

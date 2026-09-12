@@ -1,0 +1,5 @@
+D:\Sachin Agrahari\Sachin Core\SchoolManagementERP_Fixed_v2\SchoolManagementERP\obj\Release\net8.0\PubTmp\Out\SchoolManagementERP.exe
+D:\Sachin Agrahari\Sachin Core\SchoolManagementERP_Fixed_v2\SchoolManagementERP\obj\Release\net8.0\PubTmp\Out\SchoolManagementERP.dll
+D:\Sachin Agrahari\Sachin Core\SchoolManagementERP_Fixed_v2\SchoolManagementERP\obj\Release\net8.0\PubTmp\Out\SchoolManagementERP.deps.json
+D:\Sachin Agrahari\Sachin Core\SchoolManagementERP_Fixed_v2\SchoolManagementERP\obj\Release\net8.0\PubTmp\Out\SchoolManagementERP.runtimeconfig.json
+D:\Sachin Agrahari\Sachin Core\SchoolManagementERP_Fixed_v2\SchoolManagementERP\obj\Release\net8.0\PubTmp\Out\SchoolManagementERP.pdb
